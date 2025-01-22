@@ -1,0 +1,49 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+//generar cada ruta estatica
+export async function getStaticPaths()  { //funcion de astro
+    const books = await getCollection("books"); //recuperamos todos los libros
+    //devuelve todas las rutas que queremos que respondan con algo
+    return books.map((book)=>({ //mapeamos el array
+        params: {id: book.slug},
+        props:{book}, 
+    }))
+        /* Si lo hiciera uno por uno
+            {
+                params:{id:"aprendiendo-git"},
+                props:{title: "Aprendiendo Git y GitHub"},
+
+            },
+            {
+                params:{id:"algoritmos"},
+                props:{title: "Algoritmos"},
+
+            },
+            ...
+            */
+}
+const {book} = Astro.props
+const {data,slug} = book //pasamos toda la info del libro
+const{title, author, img, readtime, description, buy} = data //dentro del libro sacamos todo el contenido
+//const {title} = Astro.props
+const {Content} = await render(book) //renderizar coleccion
+//entre corchetes porque es dinamico
+---
+
+
+<Layout title={`${title} - Dev Books`}> 
+    <div class="flex gap-12">
+        <aside>
+            <img transition:name={`img-${slug}`}  class="rounded w-72 h-auto" src={`/${img}`} alt={title} >
+            <!--compra -->
+        </aside>
+        <main class="max-w-3xl">
+            <h1 class="text-4xl font-bold mb-4">{title}</h1>
+            <div class="prose prose-invert">
+                <Content/> <!--renderizar el contenido del markdown -->
+            </div>
+        </main>  
+    </div>    
+</Layout>

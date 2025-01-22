@@ -4,20 +4,21 @@ import { Image } from "astro:assets";
 
 import { getCollection } from 'astro:content';
 
-//detecta 'books' y la recuperas
+//detecta 'books' y los recupera
 const books = await getCollection('books') //recupero la coleccion de libros
 
 console.log(books)
 
+//otras formas
 //books[0].id
 //books[0].slug
 ---
 
+
 <Layout title="Libros para Programadores">
 	<main>
 		<h1 class="text-center text-7xl font-extrabold" >Libros para Programadores
-			<span class="block">LEER</span>
-		</h1>
+			<span class="block">Books</span>
 	</main>
 
 	<section aria-label="Libros recomendados para programadores">
@@ -27,12 +28,17 @@ console.log(books)
 					books.map(book => {
 						const {slug,data} = book
 						const {title, author,img,readtime,description,buy} = data 
-						
+					
 
 						return (
 							<article class="flex">
-								<a href={'/libro/${slug}'} class="mb-2 xl:mb-0 transition hover:scale-110">
-									<img class="mr-5 w-48 rounded" src={data.img} alt={title} class="w-full rounded-lg" />
+								<a href={`/libro/${slug}`} class="mb-2 xl:mb-0 transition hover:scale-110">
+									<img 
+										transition:name={`img-${slug}`} 
+										class="mr-5 w-48 rounded" 
+										src={`/${img}`} 
+										alt={title}  />
+									<!-- data.img -->
 								</a>
 
 								<div class="flex flex-col justify-center">
