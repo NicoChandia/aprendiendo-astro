@@ -3,7 +3,7 @@ import { getCollection, render } from "astro:content";
 import {SHOW_BUY_BUTTON} from "astro:env/server"
 import Layout from "../../layouts/Layout.astro";
 import AmazonLogo from "../../components/AmazonLogo.astro";
-import BookSCore from "../../components/BookSCore.astro";
+import BookScore from "../../components/BookScore.astro";
 import BuyButton from "../../components/BuyButton.astro";
 
 //generar cada ruta estatica
@@ -44,7 +44,7 @@ export const prerender = true
             <a href="/" class="hover:underline opacity-70">Volver atrás</a>
             <img transition:name={`img-${slug}`}  class="rounded w-72 h-auto" src={`/${img}`} alt={title} >
             <!--compra -->
-            <BookSCore server:defer id={slug}>
+            <BookScore server:defer id={slug}>
                 <!--mientras renderiza..cargando puntuacion -->
                 <span slot="fallback" class="text-xs opacity-70">Cargando puntuación...</span>
             </BookScore>
@@ -66,17 +66,4 @@ export const prerender = true
 
         <!-- JAVASCRIPT -->
  <!-- se ejecuta en el cliente (no estará en el server)-->
-<script>
-    import { SCORE_API_ENDPOINT } from "astro:env/client";
-
-    const scoreElement = document.querySelector('#score')
-    
-    fetch(SCORE_API_ENDPOINT)
-        .then(res => res.text())
-        .then(scoreValue => { 
-            if(scoreElement){
-                scoreElement.innerHTML=`Puntuacion: ${scoreValue.trim()}/5` //API que nos devuelve un valor random de puntuacion
-            }
-
-    })
-</script>
+<!-- si usara <script> -->
