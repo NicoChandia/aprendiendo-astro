@@ -11,7 +11,9 @@ console.log(books)
 
 //otras formas
 //books[0].id
-//books[0].slug
+//books[0].slug 
+export const prerender = true 
+//esta pagina tiene que ser totalmente estatica
 ---
 
 
@@ -42,7 +44,7 @@ console.log(books)
 								</a>
 
 								<div class="flex flex-col justify-center">
-									<h2 class="mb-2 text-2xl font-bold leading-tight text-white">
+									<h2 transition:name={`title-${slug}`} class="mb-2 text-2xl font-bold leading-tight text-white">
 										{title}
 									</h2>
 

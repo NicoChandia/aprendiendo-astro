@@ -1,6 +1,9 @@
 ---
 import { getCollection, render } from "astro:content";
+import {SHOW_BUY_BUTTON} from "astro:env/server"
 import Layout from "../../layouts/Layout.astro";
+import AmazonLogo from "../../components/AmazonLogo.astro";
+import BookSCore from "../../components/BookSCore.astro";
 
 //generar cada ruta estatica
 export async function getStaticPaths()  { //funcion de astro
@@ -30,14 +33,37 @@ const{title, author, img, readtime, description, buy} = data //dentro del libro 
 //const {title} = Astro.props
 const {Content} = await render(book) //renderizar coleccion
 //entre corchetes porque es dinamico
+export const prerender = true
 ---
 
 
 <Layout title={`${title} - Dev Books`}> 
     <div class="flex gap-12">
         <aside>
+            <a href="/" class="hover:underline opacity-70">Volver atrás</a>
             <img transition:name={`img-${slug}`}  class="rounded w-72 h-auto" src={`/${img}`} alt={title} >
             <!--compra -->
+            <BookSCore server:defer id={slug}>
+                <!--mientras renderiza..cargando puntuacion -->
+                <span slot="fallback" class="text-xs opacity-70">Cargando puntuación...</span>
+            </BookScore>
+
+            <!-- server:defer  (este componente no lo queremos estatico)-->
+            {
+                SHOW_BUY_BUTTON && (
+                    <a 
+                        href={buy.spain}
+                        title="Comprar libro"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="bg-yellow-400"
+                    
+                    >
+                        COMPRA EN AMAZON ESPAÑA
+                        <AmazonLogo/>
+                    </a>
+                )
+            }
         </aside>
         <main class="max-w-3xl">
             <h1 class="text-4xl font-bold mb-4">{title}</h1>
@@ -47,3 +73,20 @@ const {Content} = await render(book) //renderizar coleccion
         </main>  
     </div>    
 </Layout>
+
+        <!-- JAVASCRIPT -->
+ <!-- se ejecuta en el cliente (no estará en el server)-->
+<script>
+    import { SCORE_API_ENDPOINT } from "astro:env/client";
+
+    const scoreElement = document.querySelector('#score')
+    
+    fetch(SCORE_API_ENDPOINT)
+        .then(res => res.text())
+        .then(scoreValue => { 
+            if(scoreElement){
+                scoreElement.innerHTML=`Puntuacion: ${scoreValue.trim()}/5` //API que nos devuelve un valor random de puntuacion
+            }
+
+    })
+</script>
