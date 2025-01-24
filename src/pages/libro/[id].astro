@@ -4,6 +4,7 @@ import {SHOW_BUY_BUTTON} from "astro:env/server"
 import Layout from "../../layouts/Layout.astro";
 import AmazonLogo from "../../components/AmazonLogo.astro";
 import BookSCore from "../../components/BookSCore.astro";
+import BuyButton from "../../components/BuyButton.astro";
 
 //generar cada ruta estatica
 export async function getStaticPaths()  { //funcion de astro
@@ -50,19 +51,8 @@ export const prerender = true
 
             <!-- server:defer  (este componente no lo queremos estatico)-->
             {
-                SHOW_BUY_BUTTON && (
-                    <a 
-                        href={buy.spain}
-                        title="Comprar libro"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="bg-yellow-400"
+                SHOW_BUY_BUTTON && <BuyButton server:defer buy={buy} />
                     
-                    >
-                        COMPRA EN AMAZON ESPAÑA
-                        <AmazonLogo/>
-                    </a>
-                )
             }
         </aside>
         <main class="max-w-3xl">
